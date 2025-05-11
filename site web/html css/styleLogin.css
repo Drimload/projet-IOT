@@ -1,0 +1,67 @@
+body {
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(to right, #1a1d20, #18168b); /* Dégradé de fond */
+    font-family: 'Arial', sans-serif;
+}
+
+.login-container {
+    background-color: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    width: 350px;
+    text-align: center;
+}
+
+h2 {
+    margin-bottom: 20px;
+    color: #333;
+    font-weight: 600;
+}
+
+label {
+    display: block;
+    margin: 15px 0 5px;
+    font-weight: 500; 
+    color: #555;
+}
+
+input {
+    width: 100%; /* Prend toute la largeur */
+    padding: 12px; /* Espacement intérieur */
+    margin-bottom: 20px; /* Espace en dessous des champs */
+    border: 2px solid #ccc; /* Bordure grise */
+    border-radius: 6px; /* Coins arrondis */
+    font-size: 16px; /* Taille de police */
+    transition: border-color 0.3s; /* Transition pour la bordure */
+}
+
+input:focus {
+    border-color: #4A90E2; /* Couleur de la bordure au focus */
+    outline: none; /* Retire le contour par défaut */
+}
+
+button {
+    width: 100%; /* Prend toute la largeur */
+    padding: 12px; /* Espacement intérieur */
+    background-color: #4A90E2; 
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #357ABD;
+}
+
+button:focus {
+    outline: none;
+}

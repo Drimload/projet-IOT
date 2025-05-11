@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Climat en Temps Réel</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        function redirectToLogin() {
+            window.location.href = "login.html";
+        }
+    </script>
+</head>
+
+<body>
+    <div class="sidebar">
+        <a href="index.html"><button>Accueil</button></a>
+        <div class="spacer"></div>
+        <a href="#" onclick="redirectToLogin(); return false;"><button>Connexion</button></a>
+    </div>
+    <div class="content">
+        <div class="header">Climat en Temps Réel</div>
+        <div class="dashboard">
+            <div class="top-row">
+                <div class="box">
+                    <div class="box-header">Humidité</div>
+                    <div class="box-content">
+                        <div class="value" id="humidity"></div>
+                    </div>
+                </div>
+                <div class="box">
+                    <div class="box-header">Température</div>
+                    <div class="box-content">
+                        <div class="value" id="temperature"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="chart-row">
+                <div class="chart-box">
+                    <div class="box-header">Graphique Humidité</div>
+                    <div class="box-content">
+                        <canvas id="humidityChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-box">
+                    <div class="box-header">Graphique Température</div>
+                    <div class="box-content">
+                        <canvas id="temperatureChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const temperatureCanvas = document.getElementById('temperatureChart');
+        const humidityCanvas = document.getElementById('humidityChart');
+        const tempCtx = temperatureCanvas.getContext('2d');
+        const humidityCtx = humidityCanvas.getContext('2d');
+        let temperatureChart;
+        let humidityChart;
+
+        const currentTemperatureElement = document.getElementById('temperature');
+        const currentHumidityElement = document.getElementById('humidity');
+
+        function fetchDataAndDrawCharts() {
+            fetch('http://192.168.1.136/projectiotY.HamzaS.Hamza/siteweb/index.php') // L'URL de votre script PHP
+                .then(response => response.json())
+                .then(data => {
+                    const temperatureData = data.temperature || [];
+                    const humidityData = data.humidity || [];
+
+                    // Affichage en temps réel des dernières valeurs
+                    if (temperatureData.length > 0) {
+                        currentTemperatureElement.textContent = `${temperatureData[temperatureData.length - 1].value}°C`;
+                    }
+                    if (humidityData.length > 0) {
+                        currentHumidityElement.textContent = `${humidityData[humidityData.length - 1].value}%`;
+                    }
+
+                    const temperatureTimestamps = temperatureData.map(item => item.timestamp);
+                    const temperatures = temperatureData.map(item => item.value);
+                    const humidityTimestamps = humidityData.map(item => item.timestamp);
+                    const humidities = humidityData.map(item => item.value);
+
+                    // Création du graphique de température
+                    if (temperatureChart) {
+                        temperatureChart.destroy();
+                    }
+                    temperatureChart = new Chart(tempCtx, {
+                        type: 'line',
+                        data: {
+                            labels: temperatureTimestamps,
+                            datasets: [{
+                                label: 'Température (°C)',
+                                data: temperatures,
+                                borderColor: 'rgb(255, 99, 132)',
+                                borderWidth: 2,
+                                fill: false
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    title: {
+                                        color: 'white',
+                                        display: true,
+                                        text: 'Température (°C)',
+                                        font: { size: 14 }
+                                    },
+                                    grid: { display: true },
+                                    ticks: {
+                                    color: 'white',
+                                    autoSkip: false,
+                                    font: { size: 10 }}
+                                },
+                                x: {
+                                    title: {
+                                        color: 'white',
+                                        display: true,
+                                        text: 'Date et Heure',
+                                        font: { size: 14 }
+                                    },
+                                    ticks: {
+                                        color: 'white',
+                                        autoSkip: false,
+                                        maxRotation: 90,
+                                        minRotation: 45,
+                                        font: { size: 10 }
+                                    },
+                                    grid: { display: true }
+                                }
+                            },
+                            plugins: {
+                                tooltip: {
+                                    bodyFont: { size: 14 },
+                                    titleFont: { size: 14 }
+                                }
+                            }
+                        }
+                    });
+
+                    // Création du graphique d'humidité
+                    if (humidityChart) {
+                        humidityChart.destroy();
+                    }
+                    humidityChart = new Chart(humidityCtx, {
+                        type: 'line',
+                        data: {
+                            labels: humidityTimestamps,
+                            datasets: [{
+                                label: 'Humidité (%)',
+                                data: humidities,
+                                borderColor: 'rgb(54, 162, 235)',
+                                borderWidth: 2,
+                                fill: false
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    title: {
+                                        color: 'white',
+                                        display: true,
+                                        text: 'Humidité (%)',
+                                        font: { size: 14 }
+                                    },
+                                    grid: { display: true },
+                                    ticks: {
+                                        color: 'white',
+                                        autoSkip: false,
+                                        font: { size: 10 }}
+                                },
+                                x: {
+                                    title: {
+                                        color: 'white',
+                                        display: true,
+                                        text: 'Date et Heure',
+                                        font: { size: 14 }
+                                    },
+                                    ticks: {
+                                        color: 'white',
+                                        autoSkip: false,
+                                        maxRotation: 90,
+                                        minRotation: 45,
+                                        font: { size: 10 }
+                                    },
+                                    grid: { display: true }
+                                }
+                            },
+                            plugins: {
+                                tooltip: {
+                                    bodyFont: { size: 14 },
+                                    titleFont: { size: 14 }
+                                }
+                            }
+                        }
+                    });
+                })
+                .catch(error => {
+                    console.error('Erreur lors de la récupération des données :', error);
+                });
+        }
+
+        // Charger les données et dessiner les graphiques initialement
+        fetchDataAndDrawCharts();
+
+        // Mettre à jour les graphiques toutes les X millisecondes (par exemple, toutes les 5 secondes)
+        setInterval(fetchDataAndDrawCharts, 5000); // 5000 ms = 5 secondes
+    </script>
+</body>
+
+</html>

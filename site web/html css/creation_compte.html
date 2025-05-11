@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Création de compte</title>
+    <link rel="stylesheet" href="styleCreationCompte.css">
+</head>
+<body>
+
+    <div class="signup-container">
+        <h2>Créer un compte</h2>
+        <form id="signup-form" action="/action_page.php" method="POST">
+            <label for="username">Nom d'utilisateur :</label>
+            <input type="text" id="username" name="username" required>
+            <br>
+            <label for="password">Mot de passe :</label>
+            <input type="password" id="password" name="password" required>
+            <br>
+            <label for="confirm-password">Confirmer le mot de passe :</label>
+            <input type="password" id="confirm-password" name="confirm-password" required>
+            <br>
+            <button type="submit">Créer mon compte</button>
+        </form>
+
+        <div class="login-redirect">
+            <p>Vous avez déjà un compte ? <a href="login.html">connecter vous</a></p>
+        </div>
+
+    </div>
+
+    <script>
+        document.getElementById('signup-form').addEventListener('submit', function(event) {
+            event.preventDefault();  // Empêche la soumission classique
+            //  Ici, tu mettrais le code pour envoyer les données au serveur pour l'enregistrement
+            window.location.href = 'login.html'; // Redirige vers la page de connexion
+        });
+    </script>
+
+</body>
+</html>
